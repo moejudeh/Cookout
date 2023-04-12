@@ -1,8 +1,12 @@
 import pygame
 import sys
-from Assests.colors import * #Gets colors
 from pygame.locals import *
 pygame.init()
+
+sys.path.append("../Cookout")
+
+from Assests.colors import * # Gets colors
+from player import *
 
 # creating the window
 displayHeight = 1280
@@ -20,13 +24,8 @@ clock = pygame.time.Clock()
 #player Appearance
 playerColor = RED
 
-
 #player Movement
-player_X = 0
-player_Y = 0
 playerInput = {"left": False, "right": False, "up": False, "down": False}
-playerVelocity = [0, 0]
-playerSpeed = 5
 
 
 # checkInput
@@ -46,6 +45,11 @@ def checkInput(key, value):
 
 
 
+# Game Display
+# testObject = Object(400, 400, 50, 50, pygame.image.load("Assests/img/heart.png"), screen)
+# testEntity = Entity(400, 400, 50, 50, "Assests/img/player-Sheet.png", screen , 5)
+player = Player(displayHeight / 2, displayWidth / 2, 75, 75, "Assests/img/player-Sheet.png", screen , 5)
+
 while running:
     #sets the background to backgroundColor
     screen.fill(backgroundColor)
@@ -63,13 +67,13 @@ while running:
             checkInput(event.key, False)
 
     # moving player
-    playerVelocity[0] = playerInput["right"] - playerInput["left"]
-    playerVelocity[1] = playerInput["down"] - playerInput["up"] 
-    player_X += playerVelocity[0] * playerSpeed
-    player_Y += playerVelocity[1] * playerSpeed
+    player.velocity[0] = playerInput["right"] - playerInput["left"]
+    player.velocity[1] = playerInput["down"] - playerInput["up"] 
+    player.x += player.velocity[0] * player.speed
+    player.y += player.velocity[1] * player.speed
 
-    pygame.draw.circle(screen, playerColor, (player_X, player_Y), 25)
-
+    for obj in objects:
+        obj.update()
 
     #allows game to run at 60FPS
     clock.tick(60)
