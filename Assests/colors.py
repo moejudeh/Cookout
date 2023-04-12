@@ -1,8 +1,3 @@
-import pygame
-
-from pygame.locals import *
-pygame.init()
-
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 RED = (255, 0 , 0)
