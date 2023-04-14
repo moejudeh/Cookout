@@ -59,8 +59,8 @@ class Entity(Object):
             self.frame = 0
 
     def update(self):
-        self.x += self.velocity[0] * self.speed
-        self.y += self.velocity[1] * self.speed
+        self.x += self.velocity[0] 
+        self.y += self.velocity[1] 
 
         self.draw()
             

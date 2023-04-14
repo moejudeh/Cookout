@@ -15,6 +15,7 @@ from player import *
 displayHeight = 1280
 displayWidth = 720
 backgroundColor = WHITE #white screen
+
 # UNCOMMENT WHEN HAVE BACKGROUND SCREEN
 # background = pygame.transform.scale(pygame.image.load("IMAGE GOES HERE"), (displayHeight, displayWidth))
 
@@ -25,40 +26,15 @@ pygame.display.set_caption("Cookout")
 running = True
 
 # internal clock for FPS speed
-clock = pygame.time.Clock()
-
-#player Appearance
-playerColor = RED
-
-#player Movement
-playerInput = {"left": False, "right": False, "up": False, "down": False}
-
-
-# checkInput
-# checks player for input for WASD
-def checkInput(key, value):
-    if key == pygame.K_a:
-        playerInput["left"] = value
-
-    if key == pygame.K_d:
-        playerInput["right"] = value
-
-    if key == pygame.K_w:
-        playerInput["up"] = value
-
-    if key == pygame.K_s:
-        playerInput["down"] = value
-
-
+clock = pygame.time.Clock() 
 
 # Game Display
-# testObject = Object(400, 400, 50, 50, pygame.image.load("Assests/img/heart.png"), screen)
-# testEntity = Entity(400, 400, 50, 50, "Assests/img/player-Sheet.png", screen , 5)
-player = Player(displayHeight / 2, displayWidth / 2, 75, 75, "Assests/img/player-Sheet.png", screen , 5)
+player = Player(displayHeight / 2, displayWidth / 2, 75, 75, "Assests/img/CharacterSheet.png", screen , 5)
 
 while running:
     #sets the background to backgroundColor
     screen.fill(backgroundColor)
+
     ## UNCOMMENT WHEN HAVE BACKGROUND
     # screen.blit(background)
 
@@ -68,15 +44,7 @@ while running:
         if event.type == pygame.QUIT:
             pygame.quit()
             sys.exit()
-        # getting player input
-        elif event.type == pygame.KEYDOWN:
-            checkInput(event.key, True)
-        elif event.type == pygame.KEYUP:
-            checkInput(event.key, False)
 
-    # changing velocity of player
-    player.velocity[0] = playerInput["right"] - playerInput["left"]
-    player.velocity[1] = playerInput["down"] - playerInput["up"] 
 
     for obj in objects:
         obj.update()
