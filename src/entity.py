@@ -7,7 +7,7 @@ HORIZONTAL = 1
 UP = 2
 AnimationFrameRate = 10
 
-bulletSpeed= 20
+bulletSpeed= 10
 bullets = []
 
 
@@ -93,12 +93,17 @@ class Entity(Object):
         entityCenter = self.getCenter()
         bullet = Object(entityCenter[0], entityCenter[1], 30, 30, pygame.image.load('Assests/img/knife.png'), self.screen)
 
+
         aimedCenter = aimed.getCenter()
 
         xDistance = aimedCenter[0] - entityCenter[0]
         yDistance = aimedCenter[1] - entityCenter[1]
 
         angle = math.atan2(yDistance, xDistance)
+
+        # Rotates Bullet for direction
+        rotateImage = (270 - math.degrees(angle))
+        bullet.image = pygame.transform.rotate(bullet.image, rotateImage)
 
         xVelocity = bulletSpeed * math.cos(angle)
         yVelocity = bulletSpeed * math.sin(angle)
