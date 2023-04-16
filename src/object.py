@@ -17,6 +17,9 @@ class Object:
         objects.append(self)
 
 
+    def getCenter(self):
+        return self.x +  self.width / 2, self.y + self.height / 2
+
     def draw(self):
         self.screen.blit(pygame.transform.scale(self.image, (self.width, self.height)), (self.x, self.y))
 

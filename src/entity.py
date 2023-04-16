@@ -1,5 +1,5 @@
 from object import *
-
+import math
 
 #CONSTANTS
 DOWN = 0
@@ -7,8 +7,12 @@ HORIZONTAL = 1
 UP = 2
 AnimationFrameRate = 10
 
+bulletSpeed= 20
+bullets = []
+
+
 class Entity(Object):
-    def __init__(self, x, y, width, height, tileset, screen, speed):
+    def __init__(self, x, y, width, height, tileset, screen, speed, shootSpeed):
         super().__init__(x, y, width, height, None, screen)
         self.speed = speed
         self.tileset = loadTileset(tileset, 16, 16)
@@ -19,6 +23,11 @@ class Entity(Object):
         self.frame = 0
         self.walkFrames = [0, 1, 0, 2]
         self.frameTimer = 0
+
+
+        ## FOR SHOOTING COOLDOWN
+        self.shootCD = shootSpeed
+        self.shootTimer = 0
 
     ## USED FOR ANIMATION
     def changeDirection(self):
@@ -58,12 +67,45 @@ class Entity(Object):
         if self.frame >= len(self.walkFrames):
             self.frame = 0
 
+
+    def move(self):
+        if self.velocity[0] != 0 and self.velocity[1] != 0:
+            self.x += self.velocity[0] / math.sqrt(2)
+            self.y += self.velocity[1] / math.sqrt(2)
+        else:
+            self.x += self.velocity[0]
+            self.y += self.velocity[1]
+
     def update(self):
-        self.x += self.velocity[0] 
-        self.y += self.velocity[1] 
+        self.move()
+
+        self.shootTimer += 1
 
         self.draw()
-            
+
+    # Shooting
+    def shoot(self, aimed):
+        if(self.shootTimer < self.shootCD):
+            return
+        
+        self.shootTimer = 0
+        
+        entityCenter = self.getCenter()
+        bullet = Object(entityCenter[0], entityCenter[1], 30, 30, pygame.image.load('Assests/img/knife.png'), self.screen)
+
+        aimedCenter = aimed.getCenter()
+
+        xDistance = aimedCenter[0] - entityCenter[0]
+        yDistance = aimedCenter[1] - entityCenter[1]
+
+        angle = math.atan2(yDistance, xDistance)
+
+        xVelocity = bulletSpeed * math.cos(angle)
+        yVelocity = bulletSpeed * math.sin(angle)
+
+        bullet.velocity = [xVelocity, yVelocity]
+
+        bullets.append(bullet)
 
 
 
