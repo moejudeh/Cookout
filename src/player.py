@@ -1,9 +1,7 @@
 from entity import *
-import math
-
 
 # PLAYER STATS
-
+hearts = []
 
 class Player(Entity):
     def __init__(self, x, y, width, height, tileset, screen, speed, cursor):
@@ -35,5 +33,28 @@ class Player(Entity):
 
     def update(self):
         self.getInput()
+        self.updateUI()
+
         super().update()
     
+    def updateUI(self):
+        img = pygame.image.load("Assests/img/heart.png")
+        
+        if len(hearts) == 0:
+            newHeart = Object(10, 10, 100, 100, img, self.screen)
+            hearts.append(newHeart)
+            
+        elif self.health > len(hearts):
+            newHeart = Object(hearts[len(hearts) - 1].x + 75, 10, 100, 100, img, self.screen)
+            hearts.append(newHeart)
+
+    def takeDamage(self):
+        objects.remove(hearts.pop())
+        super().takeDamage()
+ 
+    def heal(self):
+        if(self.health == PLAYER_HEALTH):
+            return
+        
+        else:
+            self.health += 1

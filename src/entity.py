@@ -158,3 +158,25 @@ def loadTileset(filename, width, height):
             rect = (tileX * width, tileY * height, width, height)
             line.append(image.subsurface(rect))
     return tileset
+
+
+# CHECKS FOR COLLISIONS
+def checkCollisions(player):
+    for e in enemies:
+        for b in bullets:
+            if b.hit(e):
+                e.velocity = b.velocity
+                # DELETE BULLET IF HIT SOMETHING
+                bullets.remove(b)
+                objects.remove(b)
+                e.takeDamage()
+        
+        if e.hit(player):
+            e.entityKilled()
+            player.takeDamage()
+
+    for p in powerups:
+        if p.hit(player):
+            powerups.remove(p)
+            objects.remove(p)
+            player.heal()

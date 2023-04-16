@@ -4,14 +4,22 @@ PLAYER_SHEET = "Assests/img/CharacterSheet.png"
 PLAYER_SPEED = 5
 PLAYER_HEALTH = 3
 PLAYER_SHOOT_SPEED = 35
+
 ## CARROT
 CARROT_SIZE = 75
 CARROT_SHEET = "Assests/img/carrotEnemy.png"
-CARROT_SPEED = 6
+CARROT_SPEED = 5
 CARROT_SHOOT_SPEED = 0
-CARROT_HEALTH = 3
+CARROT_HEALTH = 2
+CARROT_HEART_DROP = .50
+
+## HEART
+HEART_SIZE = 40
+HEART_SHEET = "Assests\img\heart.png"
 
 # GAME
-IFRAMES = 10
+IFRAMES = 0
 X_BOUND = [50, 1230]
 Y_BOUND = [100, 670]
+displayHeight = 1280
+displayWidth = 720

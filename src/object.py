@@ -1,9 +1,11 @@
 import pygame
 from pygame.locals import *
 from settings import *
-
 pygame.init()
+
 objects = []
+powerups = []
+enemies = []
 
 class Object:
     def __init__(self, x, y, width, height, image, screen):
@@ -16,7 +18,7 @@ class Object:
         self.velocity = [0, 0]
         
         self.collider = [width / 2.5, height]
-        
+
         objects.append(self)
 
 
