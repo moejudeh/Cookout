@@ -1,7 +1,8 @@
 import pygame
 from pygame.locals import *
-pygame.init()
+from settings import *
 
+pygame.init()
 objects = []
 
 class Object:
@@ -13,7 +14,9 @@ class Object:
         self.image = image
         self.screen = screen
         self.velocity = [0, 0]
-
+        
+        self.collider = [width / 2.5, height]
+        
         objects.append(self)
 
 
@@ -27,4 +30,19 @@ class Object:
         self.x += self.velocity[0]
         self.y += self.velocity[1]
         self.draw()
+    
+    def hit(self, entity):
+        selfX, selfY = self.getCenter()
+        selfW = self.collider[0] / 2
+        selfH = self.collider[1] / 2
+
+        entityX, entityY = entity.getCenter()
+        entityW = entity.collider[0] / 2
+        entityH = entity.collider[1] / 2
+
+        if selfX + selfW > entityX - entityW and selfX - selfW < entityX + entityW:
+            if selfY + selfH > entityY - entityH and selfY - selfH < entityY + entityH:
+                print("collision detected")
+                return  True
+        return False
     

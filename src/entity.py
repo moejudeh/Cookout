@@ -12,9 +12,13 @@ bullets = []
 
 
 class Entity(Object):
-    def __init__(self, x, y, width, height, tileset, screen, speed, shootSpeed):
+    # CONSTRUCTOR
+    def __init__(self, x, y, width, height, tileset, screen, speed, shootSpeed, health):
         super().__init__(x, y, width, height, None, screen)
         self.speed = speed
+        self.health = health
+        self.iFrames = 0
+
         self.tileset = loadTileset(tileset, 16, 16)
 
         ## USED FOR ANIMATING WALKING
@@ -42,6 +46,7 @@ class Entity(Object):
         elif self.velocity[1] < 0:
             self.direction = UP
 
+    # DRAWS ENTITY ON SCREEN
     def draw(self):
         image = pygame.transform.scale(self.tileset[self.walkFrames[self.frame]][self.direction], (self.width, self.height))
 
@@ -67,7 +72,7 @@ class Entity(Object):
         if self.frame >= len(self.walkFrames):
             self.frame = 0
 
-
+    # MOVES ENTITY
     def move(self):
         if self.velocity[0] != 0 and self.velocity[1] != 0:
             self.x += self.velocity[0] / math.sqrt(2)
@@ -76,14 +81,15 @@ class Entity(Object):
             self.x += self.velocity[0]
             self.y += self.velocity[1]
 
+    # UPDATES ENTITY ON SCREEN
     def update(self):
         self.move()
-
-        self.shootTimer += 1
-
         self.draw()
 
-    # Shooting
+        self.shootTimer += 1
+        self.iFrames -= 1
+
+    # SHOOTING
     def shoot(self, aimed):
         if(self.shootTimer < self.shootCD):
             return
@@ -92,7 +98,6 @@ class Entity(Object):
         
         entityCenter = self.getCenter()
         bullet = Object(entityCenter[0], entityCenter[1], 30, 30, pygame.image.load('Assests/img/knife.png'), self.screen)
-
 
         aimedCenter = aimed.getCenter()
 
@@ -113,8 +118,26 @@ class Entity(Object):
         bullets.append(bullet)
 
 
+    # TAKE DAMAGE ONCE HIT
+    def takeDamage(self):
+        # if in I-Frames take no damage
+        if(self.iFrames > 0):
+            return
+        
+        self.health -= 1
+        
+        if(self.health == 0):
+            self.entityKilled()
+
+        self.iFrames = IFRAMES
+    
+    # KILL
+    def entityKilled(self):
+        objects.remove(self)
 
 
+
+# LOADS TILES
 def loadTileset(filename, width, height):
     image = pygame.image.load(filename).convert_alpha()
     imageWidth, imageHeight = image.get_size()

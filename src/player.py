@@ -3,11 +3,11 @@ import math
 
 
 # PLAYER STATS
-SHOOTSPEED = 20
+
 
 class Player(Entity):
     def __init__(self, x, y, width, height, tileset, screen, speed, cursor):
-        super().__init__(x, y, width, height, tileset, screen, speed, SHOOTSPEED)
+        super().__init__(x, y, width, height, tileset, screen, speed, PLAYER_SHOOT_SPEED, PLAYER_HEALTH)
         self.velocity = [0, 0]
         self.cursor = cursor
 
