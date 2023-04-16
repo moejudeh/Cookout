@@ -11,8 +11,6 @@ from settings import * # Gets game settings
 # creating the window
 displayHeight = 1280
 displayWidth = 720
-backgroundColor = GRASS
-
 
 # CHECKS FOR COLLISIONS
 def checkCollisions():
@@ -23,15 +21,15 @@ def checkCollisions():
                 # DELETE BULLET IF HIT SOMETHING
                 bullets.remove(b)
                 objects.remove(b)
-
                 e.takeDamage()
         
         if e.hit(player):
+            e.entityKilled()
             player.takeDamage()
 
 
 # UNCOMMENT WHEN HAVE BACKGROUND SCREEN
-# background = pygame.transform.scale(pygame.image.load("IMAGE GOES HERE"), (displayHeight, displayWidth))
+background = pygame.transform.scale(pygame.image.load("Assests/img/background.png"), (displayHeight, displayWidth))
 
 screen = pygame.display.set_mode((displayHeight, displayWidth))
 pygame.display.set_caption("Cookout")
@@ -46,17 +44,11 @@ clock = pygame.time.Clock()
 cursor = Object(0, 0, 50, 50, pygame.image.load('Assests/img/cursor.png'), screen)
 player = Player(displayHeight / 2, displayWidth / 2, PLAYER_SIZE, PLAYER_SIZE, PLAYER_SHEET, screen , PLAYER_SPEED, cursor)
 
-
-## TESTING PURPOSES
-enemy = Carrot(10, 10, CARROT_SIZE, CARROT_SIZE, CARROT_SHEET, screen, CARROT_SPEED, CARROT_SHOOT_SPEED, player)
-
 pygame.mouse.set_visible = False
 while running:
-    #sets the background to backgroundColor
-    screen.fill(backgroundColor)
 
-    ## UNCOMMENT WHEN HAVE BACKGROUND
-    # screen.blit(background)
+    ## Setting Background
+    screen.blit(background, (0,0))
 
 
     # getting mouse position
@@ -79,7 +71,7 @@ while running:
 
             # Spawns Carrots
             if(event.key == pygame.K_n):
-                Carrot(10, 10, CARROT_SIZE, CARROT_SIZE, CARROT_SHEET, screen, CARROT_SPEED, CARROT_SHOOT_SPEED, player)
+                Carrot(100, 100, CARROT_SIZE, CARROT_SIZE, CARROT_SHEET, screen, CARROT_SPEED, CARROT_SHOOT_SPEED, player)
 
 
     for obj in objects:
@@ -88,6 +80,12 @@ while running:
     for e in enemies:
         if objects.count(e) == 0:
             enemies.remove(e)
+
+    # Make sure bullet stays on map
+    for b in bullets:
+        if b.x > 1280 or b.x < 0 or b.y > 720 or b.y < 0:
+            bullets.remove(b)
+            objects.remove(b)
 
     checkCollisions()
     #allows game to run at 60FPS

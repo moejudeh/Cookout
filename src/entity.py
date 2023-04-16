@@ -74,6 +74,15 @@ class Entity(Object):
 
     # MOVES ENTITY
     def move(self):
+        selfX, selfY = self.getCenter()
+        selfW = self.collider[0] / 2
+        selfH = self.collider[1] / 2
+
+        if selfX + selfW + self.velocity[0] > X_BOUND[1] or selfX - selfW + self.velocity[0] < X_BOUND[0]:
+            self.velocity[0] = 0
+        if selfY + selfH + self.velocity[1] > Y_BOUND[1] or selfY - selfH + self.velocity[1] < Y_BOUND[0]:
+            self.velocity[1] = 0
+
         if self.velocity[0] != 0 and self.velocity[1] != 0:
             self.x += self.velocity[0] / math.sqrt(2)
             self.y += self.velocity[1] / math.sqrt(2)
