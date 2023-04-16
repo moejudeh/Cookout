@@ -34,20 +34,26 @@ startScreenRunning = True
 playScreenRunning = False
 EndScreenRunning = False
 
+#startScreen Buttons
+PLAY_BUTTON = None
+QUIT_BUTTON = None
+
+
 # RUNS START SCREEN
 def startScreen():
-
+    global PLAY_BUTTON, QUIT_BUTTON
     screen.fill(GRASS)
 
-    PLAY_BUTTON = Button(pygame.image.load("Assests/img/buttonBackground.png"), (640, 300), "PLAY", get_font(75), "#d7fcd4", "White")
-    QUIT_BUTTON = Button(pygame.image.load("Assests/img/buttonBackground.png"), (640, 500), "QUIT", get_font(75), "#d7fcd4", "White")
+    if PLAY_BUTTON is None and QUIT_BUTTON is None:
+        PLAY_BUTTON = Button(pygame.image.load("Assests/img/buttonBackground.png"), (640, 300), "PLAY", get_font(75), "#d7fcd4", "White")
+        QUIT_BUTTON = Button(pygame.image.load("Assests/img/buttonBackground.png"), (640, 500), "QUIT", get_font(75), "#d7fcd4", "White")
+
 
     for button in Buttons:
         button.changeColor((cursor.x, cursor.y))
         button.update(screen)
 
-
-# RUNS GAMEww
+# RUNS GAME
 def playGame():
     global player, gameSpawner, cursor, startScreenRunning, playScreenRunning
     
@@ -59,6 +65,9 @@ def playGame():
 
 
     next(gameSpawner)
+
+    objects.remove(cursor)
+    objects.append(cursor)
 
     ## Updates everything
     for obj in objects:
@@ -90,7 +99,8 @@ def playGame():
         cursor = Object(0, 0, 50, 50, pygame.image.load('Assests/img/cursor.png'), screen)
 
 
-
+def resultScreen():
+    pass
 
 while True:
 
@@ -106,22 +116,27 @@ while True:
             sys.exit()
 
         if event.type == pygame.MOUSEBUTTONDOWN:
-            if Buttons[0].checkForInput((cursor.x, cursor.y)):
-                startScreenRunning = False
-                playScreenRunning = True
-                
-            if Buttons[1].checkForInput((cursor.x, cursor.y)):
-                pygame.quit()
-                sys.exit()
+            if len(Buttons) != 0:
+                if Buttons[0].checkForInput((cursor.x, cursor.y)):
+                    startScreenRunning = False
+                    playScreenRunning = True
+                    Buttons.clear()
+                    PLAY_BUTTON = None
+                    QUIT_BUTTON = None
+                    
+                elif Buttons[1].checkForInput((cursor.x, cursor.y)):
+                    pygame.quit()
+                    sys.exit()
     
     
     
-    # ## Running Start Screen
+    ## Running Start Screen
     if startScreenRunning:
         startScreen()
-
     elif playScreenRunning:
         playGame()
+    elif EndScreenRunning:
+        resultScreen()
 
 
     #     if event.type == pygame.KEYDOWN:
@@ -137,7 +152,6 @@ while True:
     #         # stationary Carrot
     #         if(event.key == pygame.K_x):
     #             Carrot(CARROT_SIZE, CARROT_SIZE, CARROT_SHEET, screen, 0, CARROT_SHOOT_SPEED, player)
-
 
     # #allows game to run at 60FPS
     clock.tick(60)

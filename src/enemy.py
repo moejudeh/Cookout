@@ -49,6 +49,7 @@ class Carrot(Entity):
         self.dropHeart(outcome, CARROT_HEART_DROP)
 
         enemies.remove(self)
+        self.player.score += 1
         super().entityKilled()
         
 

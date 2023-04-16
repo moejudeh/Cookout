@@ -163,17 +163,30 @@ def loadTileset(filename, width, height):
 # CHECKS FOR COLLISIONS
 def checkCollisions(player):
     for e in enemies:
+        dead = False
+        tookDamage = False
+
+        if e.hit(player):
+            dead = True
+            player.takeDamage()
+        
         for b in bullets:
             if b.hit(e):
                 e.velocity = b.velocity
                 # DELETE BULLET IF HIT SOMETHING
                 bullets.remove(b)
                 objects.remove(b)
-                e.takeDamage()
-        
-        if e.hit(player):
+                tookDamage = True
+
+        if tookDamage:
+            e.takeDamage()
+        elif dead:
             e.entityKilled()
-            player.takeDamage()
+
+
+        
+            
+        
 
     for p in powerups:
         if p.hit(player):

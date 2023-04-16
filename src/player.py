@@ -1,13 +1,16 @@
 from entity import *
+from Assests.colors import * # Gets colors
 
 # PLAYER STATS
 hearts = []
+scoreFont = pygame.font.Font("Assests/font.ttf", 50)
 
 class Player(Entity):
     def __init__(self, x, y, width, height, tileset, screen, speed, cursor):
         super().__init__(x, y, width, height, tileset, screen, speed, PLAYER_SHOOT_SPEED, PLAYER_HEALTH)
         self.velocity = [0, 0]
         self.cursor = cursor
+        self.score = 0
 
     def getInput(self):
         self.velocity = [0, 0]  
@@ -48,9 +51,14 @@ class Player(Entity):
             newHeart = Object(hearts[len(hearts) - 1].x + 75, 10, 100, 100, img, self.screen)
             hearts.append(newHeart)
 
+        scoreText = scoreFont.render(f'Score: { self.score }', True, BLACK)
+        self.screen.blit(scoreText, (1270 - scoreText.get_width(), 50))
+
     def takeDamage(self):
-        objects.remove(hearts.pop())
-        super().takeDamage()
+        if self.health > 0:
+            objects.remove(hearts.pop())
+            self.score -= 1
+            super().takeDamage()
  
     def heal(self):
         if(self.health == PLAYER_HEALTH):
