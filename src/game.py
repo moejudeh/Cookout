@@ -40,7 +40,7 @@ titleButton = None
 # RUNS START SCREEN
 def startScreen():
     global PLAY_BUTTON, QUIT_BUTTON
-    screen.fill(GRASS)
+    screen.fill(BACKGROUND)
 
     gameName = scoreFont.render(f'CookOut', True, WHITE)
     screen.blit(gameName, (displayWidth / 2 - gameName.get_width() / 2, displayHeight / 2 - 250))
@@ -105,7 +105,7 @@ def playGame():
 
 def resultScreen():
     global SCORE_GOT, HIGHSCORE, titleButton
-    screen.fill(GRASS)
+    screen.fill(BACKGROUND)
 
     scoreText = scoreFont.render(f'Score: { SCORE_GOT }', True, BLACK)
     screen.blit(scoreText, (displayWidth / 2 - scoreText.get_width() / 2, displayHeight / 2 - 200))
