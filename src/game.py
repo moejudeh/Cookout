@@ -42,6 +42,10 @@ def startScreen():
     global PLAY_BUTTON, QUIT_BUTTON
     screen.fill(GRASS)
 
+    gameName = scoreFont.render(f'CookOut', True, WHITE)
+    screen.blit(gameName, (displayWidth / 2 - gameName.get_width() / 2, displayHeight / 2 - 250))
+
+
     if PLAY_BUTTON is None and QUIT_BUTTON is None:
         PLAY_BUTTON = Button(pygame.image.load("Assests/img/buttonBackground.png"), (640, 300), "PLAY", get_font(75), "#d7fcd4", "White")
         QUIT_BUTTON = Button(pygame.image.load("Assests/img/buttonBackground.png"), (640, 500), "QUIT", get_font(75), "#d7fcd4", "White")
@@ -77,8 +81,6 @@ def playGame():
             bullets.remove(b)
             objects.remove(b)
 
-    if player is not None:    
-        checkCollisions(player)
 
     # CHECKS IF PLAYER IS DEAD
     if player.health == 0:
@@ -96,6 +98,10 @@ def playGame():
         player = None
         gameSpawner = None
         cursor = Object(0, 0, 50, 50, pygame.image.load('Assests/img/cursor.png'), screen)
+
+    if player is not None:
+        checkCollisions(player)
+
 
 def resultScreen():
     global SCORE_GOT, HIGHSCORE, titleButton
