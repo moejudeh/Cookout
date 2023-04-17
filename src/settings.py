@@ -23,4 +23,5 @@ X_BOUND = [50, 1230]
 Y_BOUND = [100, 670]
 displayHeight = 720
 displayWidth = 1280
+SCORE_GOT= 0
 HIGHSCORE = 0

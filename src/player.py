@@ -55,7 +55,7 @@ class Player(Entity):
         self.screen.blit(scoreText, (1270 - scoreText.get_width(), 50))
 
     def takeDamage(self):
-        if self.health > 0:
+        if len(hearts) > 0:
             objects.remove(hearts.pop())
             self.score -= 1
             super().takeDamage()

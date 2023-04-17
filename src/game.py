@@ -10,13 +10,11 @@ from settings import * # Gets game settings
 from button import * # Button creation
 
 # creating the window
-displayHeight = 1280
-displayWidth = 720
-screen = pygame.display.set_mode((displayHeight, displayWidth))
+screen = pygame.display.set_mode((displayWidth, displayHeight))
 pygame.display.set_caption("Cookout")
 
 # Loads Background Image for game
-background = pygame.transform.scale(pygame.image.load("Assests/img/background.png"), (displayHeight, displayWidth))
+background = pygame.transform.scale(pygame.image.load("Assests/img/background.png"), (displayWidth, displayHeight))
 
 ## PLAYER AND CURSOR
 player = None
@@ -37,7 +35,7 @@ EndScreenRunning = False
 #startScreen Buttons
 PLAY_BUTTON = None
 QUIT_BUTTON = None
-
+titleButton = None
 
 # RUNS START SCREEN
 def startScreen():
@@ -55,12 +53,12 @@ def startScreen():
 
 # RUNS GAME
 def playGame():
-    global player, gameSpawner, cursor, startScreenRunning, playScreenRunning
+    global player, gameSpawner, cursor, EndScreenRunning, playScreenRunning, SCORE_GOT
     
     screen.blit(background, (0,0))
 
     if player is None:
-        player = Player(displayHeight / 2, displayWidth / 2, PLAYER_SIZE, PLAYER_SIZE, PLAYER_SHEET, screen , PLAYER_SPEED, cursor)
+        player = Player(displayWidth / 2, displayHeight / 2, PLAYER_SIZE, PLAYER_SIZE, PLAYER_SHEET, screen , PLAYER_SPEED, cursor)
         gameSpawner = enemySpawner(screen , player)
 
 
@@ -92,18 +90,34 @@ def playGame():
         powerups.clear()
 
         playScreenRunning = False
-        startScreenRunning = True
-    
+        EndScreenRunning = True
+        SCORE_GOT = player.score
+
         player = None
         gameSpawner = None
         cursor = Object(0, 0, 50, 50, pygame.image.load('Assests/img/cursor.png'), screen)
 
-
 def resultScreen():
-    pass
+    global SCORE_GOT, HIGHSCORE, titleButton
+    screen.fill(GRASS)
+
+    scoreText = scoreFont.render(f'Score: { SCORE_GOT }', True, BLACK)
+    screen.blit(scoreText, (displayWidth / 2 - scoreText.get_width() / 2, displayHeight / 2 - 200))
+
+    if SCORE_GOT > HIGHSCORE:
+        HIGHSCORE = SCORE_GOT
+
+    scoreText = scoreFont.render(f'HighScore: { HIGHSCORE }', True, BLACK)
+    screen.blit(scoreText, (displayWidth / 2 - scoreText.get_width() / 2, displayHeight / 2 - 75))
+
+    if titleButton is None:
+        titleButton = Button(pygame.image.load("Assests/img/buttonBackground.png"), (640, displayHeight / 2  + 100), "Title Screen", get_font(30), "#d7fcd4", "White")
+    
+    titleButton.changeColor((cursor.x, cursor.y))
+    titleButton.update(screen)
+
 
 while True:
-
     # getting mouse position
     mousePos = pygame.mouse.get_pos()
     cursor.x = mousePos[0] - cursor.width / 2
@@ -116,7 +130,7 @@ while True:
             sys.exit()
 
         if event.type == pygame.MOUSEBUTTONDOWN:
-            if len(Buttons) != 0:
+            if len(Buttons) == 2:
                 if Buttons[0].checkForInput((cursor.x, cursor.y)):
                     startScreenRunning = False
                     playScreenRunning = True
@@ -127,8 +141,13 @@ while True:
                 elif Buttons[1].checkForInput((cursor.x, cursor.y)):
                     pygame.quit()
                     sys.exit()
-    
-    
+
+            if titleButton is not None:
+                if titleButton.checkForInput((cursor.x, cursor.y)):
+                    startScreenRunning = True
+                    EndScreenRunning = False
+                    Buttons.clear()
+                    titleButton = None
     
     ## Running Start Screen
     if startScreenRunning:
@@ -137,21 +156,6 @@ while True:
         playGame()
     elif EndScreenRunning:
         resultScreen()
-
-
-    #     if event.type == pygame.KEYDOWN:
-    #         # Kills all enemies
-    #         if(event.key == pygame.K_m):
-    #             for e in enemies:
-    #                 e.entityKilled()
-
-    #         # Spawns Carrots
-    #         if(event.key == pygame.K_n):
-    #             Carrot(CARROT_SIZE, CARROT_SIZE, CARROT_SHEET, screen, CARROT_SPEED, CARROT_SHOOT_SPEED, player)
-
-    #         # stationary Carrot
-    #         if(event.key == pygame.K_x):
-    #             Carrot(CARROT_SIZE, CARROT_SIZE, CARROT_SHEET, screen, 0, CARROT_SHOOT_SPEED, player)
 
     # #allows game to run at 60FPS
     clock.tick(60)
