@@ -1,5 +1,5 @@
 from entity import *
-from Assests.colors import * # Gets colors
+from Assests.colors import *    # Gets colors
 
 # PLAYER STATS
 hearts = []

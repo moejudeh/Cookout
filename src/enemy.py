@@ -15,8 +15,6 @@ class Carrot(Entity):
 
     def moveEnemy(self):
         enemyCenter = self.getCenter()
-
-
         playerCenter = self.player.getCenter()
 
         xDistance = playerCenter[0] - enemyCenter[0]

@@ -3,18 +3,19 @@ from pygame.locals import *
 pygame.init()
 sys.path.append("../Cookout")
 
-from Assests.colors import * # Gets colors
-from player import * # Gets player functions
-from enemy import * # Gets Enemies functions
-from settings import * # Gets game settings
-from button import * # Button creation
+from Assests.colors import *    # Gets colors
+from player import *    # Gets player functions
+from enemy import *    # Gets Enemies functions
+from settings import *    # Gets game settings
+from button import *    # Button creation
 
 # creating the window
-screen = pygame.display.set_mode((displayWidth, displayHeight))
+screen = pygame.display.set_mode((DISPLAYWIDTH, DISPLAYHEIGHT))
 pygame.display.set_caption("Cookout")
+pygame.display.set_icon(pygame.image.load("Assests/icon/gameIcon.ico"))
 
 # Loads Background Image for game
-background = pygame.transform.scale(pygame.image.load("Assests/img/background.png"), (displayWidth, displayHeight))
+background = pygame.transform.scale(pygame.image.load("Assests/img/background.png"), (DISPLAYWIDTH, DISPLAYHEIGHT))
 
 ## PLAYER AND CURSOR
 player = None
@@ -43,7 +44,7 @@ def startScreen():
     screen.fill(BACKGROUND)
 
     gameName = scoreFont.render(f'CookOut', True, WHITE)
-    screen.blit(gameName, (displayWidth / 2 - gameName.get_width() / 2, displayHeight / 2 - 250))
+    screen.blit(gameName, (DISPLAYWIDTH / 2 - gameName.get_width() / 2, DISPLAYHEIGHT / 2 - 250))
 
 
     if PLAY_BUTTON is None and QUIT_BUTTON is None:
@@ -62,7 +63,7 @@ def playGame():
     screen.blit(background, (0,0))
 
     if player is None:
-        player = Player(displayWidth / 2, displayHeight / 2, PLAYER_SIZE, PLAYER_SIZE, PLAYER_SHEET, screen , PLAYER_SPEED, cursor)
+        player = Player(DISPLAYWIDTH / 2, DISPLAYHEIGHT / 2, PLAYER_SIZE, PLAYER_SIZE, PLAYER_SHEET, screen , PLAYER_SPEED, cursor)
         gameSpawner = enemySpawner(screen , player)
 
 
@@ -99,25 +100,26 @@ def playGame():
         gameSpawner = None
         cursor = Object(0, 0, 50, 50, pygame.image.load('Assests/img/cursor.png'), screen)
 
+
     if player is not None:
         checkCollisions(player)
 
-
+# RUNS RESULT SCREEN
 def resultScreen():
     global SCORE_GOT, HIGHSCORE, titleButton
     screen.fill(BACKGROUND)
 
     scoreText = scoreFont.render(f'Score: { SCORE_GOT }', True, BLACK)
-    screen.blit(scoreText, (displayWidth / 2 - scoreText.get_width() / 2, displayHeight / 2 - 200))
+    screen.blit(scoreText, (DISPLAYWIDTH / 2 - scoreText.get_width() / 2, DISPLAYHEIGHT / 2 - 200))
 
     if SCORE_GOT > HIGHSCORE:
         HIGHSCORE = SCORE_GOT
 
     scoreText = scoreFont.render(f'HighScore: { HIGHSCORE }', True, BLACK)
-    screen.blit(scoreText, (displayWidth / 2 - scoreText.get_width() / 2, displayHeight / 2 - 75))
+    screen.blit(scoreText, (DISPLAYWIDTH / 2 - scoreText.get_width() / 2, DISPLAYHEIGHT / 2 - 75))
 
     if titleButton is None:
-        titleButton = Button(pygame.image.load("Assests/img/buttonBackground.png"), (640, displayHeight / 2  + 100), "Title Screen", get_font(30), "#d7fcd4", "White")
+        titleButton = Button(pygame.image.load("Assests/img/buttonBackground.png"), (640, DISPLAYHEIGHT / 2  + 100), "Title Screen", get_font(30), "#d7fcd4", "White")
     
     titleButton.changeColor((cursor.x, cursor.y))
     titleButton.update(screen)
@@ -135,6 +137,7 @@ while True:
             pygame.quit()
             sys.exit()
 
+        # USED FOR BUTTON INPUTS ON SCREENS
         if event.type == pygame.MOUSEBUTTONDOWN:
             if len(Buttons) == 2:
                 if Buttons[0].checkForInput((cursor.x, cursor.y)):
